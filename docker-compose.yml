@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: dw-optimizer-db
+    environment:
+      POSTGRES_USER: dw_optimizer
+      POSTGRES_PASSWORD: optimizer_pass
+      POSTGRES_DB: dw_optimizer
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dw_optimizer"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    container_name: dw-optimizer-api
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://dw_optimizer:optimizer_pass@postgres:5432/dw_optimizer
+      ENVIRONMENT: docker
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app/backend
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/Dockerfile.frontend
+    container_name: dw-optimizer-ui
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_API_URL: http://localhost:8000
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
