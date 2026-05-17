@@ -1,0 +1,15 @@
+[build]
+builder = "nixpacks"
+
+[build.nixpacks]
+providers = ["python", "nodejs"]
+
+[[services]]
+name = "backend"
+cmd = "cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT"
+port = 8000
+
+[[services]]
+name = "frontend"
+cmd = "cd frontend && npm run build"
+port = 3000
