@@ -1,0 +1,13 @@
+build:
+  docker:
+    web: Dockerfile
+  config:
+    BUILDPACK_URL: heroku/python
+
+release:
+  image: web
+  command:
+    - python backend/manage.py migrate --noinput
+
+run:
+  web: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
