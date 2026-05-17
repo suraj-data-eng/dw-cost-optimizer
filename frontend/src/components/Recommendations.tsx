@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import '../styles/Recommendations.css'
 
@@ -34,7 +34,6 @@ export function Recommendations() {
       priority: "high"
     }
   ])
-  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     fetchRecommendations()
