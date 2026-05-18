@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from 'axios'
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000'
+// Use optional chaining and nullish coalescing to handle import.meta.env safely
+const API_BASE_URL = (import.meta.env.VITE_API_URL as string | undefined) || 'http://localhost:8000'
 
 const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
