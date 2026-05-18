@@ -8,8 +8,9 @@ from pathlib import Path
 
 router = APIRouter(prefix="/api", tags=["costs"])
 
-# Load data directly
-SAMPLE_DATA_DIR = Path("C:/Users/LENOVO/Downloads/testing")
+# Load data from environment or use default location
+DATA_DIR = os.getenv("DATA_DIR", "/data")
+SAMPLE_DATA_DIR = Path(DATA_DIR)
 
 def load_cluster_usage():
     """Load cluster usage data"""
